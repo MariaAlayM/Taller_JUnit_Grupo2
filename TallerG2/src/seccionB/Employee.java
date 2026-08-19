@@ -4,8 +4,8 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
 
-public class Employee
-{   //remuneracion mensual unificada
+public class Employee{ 
+  //remuneracion mensual unificada
     private final float rmu = (float) 386.0;
     //salario del employee
     private float salary;
