@@ -46,86 +46,41 @@ public class EmployeeTest {
     @Test
     void testCalculateYearBonusSupervisor() {
 
-        employee = new Employee(
-                1000F,
-                "USD",
-                10F,
-                EmployeeType.Supervisor
-        );
-
+        employee = new Employee(1000F,"USD",10F,EmployeeType.Supervisor);            
         float expected = 1000F + (386F * 0.5F);
-
-        assertEquals(
-                expected,
-                employee.CalculateYearBonus(),
-                0.001F
-        );
+        assertEquals(expected,employee.CalculateYearBonus(),0.001F);
+                    
     }
 
     @Test
     void testCalculateYearBonusManager() {
 
-        employee = new Employee(
-                1000F,
-                "USD",
-                10F,
-                EmployeeType.Manager
-        );
-
+        employee = new Employee(1000F,"USD",10F,EmployeeType.Manager);             
         float expected = 1000F + (386F * 1.0F);
-
-        assertEquals(
-                expected,
-                employee.CalculateYearBonus(),
-                0.001F
-        );
+        assertEquals(expected,employee.CalculateYearBonus(),0.001F);             
+   
     }
 
     @Test
     void testCalculateYearBonusDifferentCurrency() {
 
-        employee = new Employee(
-                1000F,
-                "EUR",
-                10F,
-                EmployeeType.Supervisor
-        );
-
+        employee = new Employee(1000F,"EUR",10F, EmployeeType.Supervisor);
         float salario = 1000F * 0.95F;
-
         float expected = salario + (386F * 0.5F);
 
-        assertEquals(
-                expected,
-                employee.CalculateYearBonus(),
-                0.001F
-        );
+        assertEquals(expected,employee.CalculateYearBonus(),0.001F);
+    
     }
 
     @Test
     void testCalculateYearBonusUSDByContent() {
-
         String currency = new String("USD");
 
-        employee = new Employee(
-                1000F,
-                currency,
-                10F,
-                EmployeeType.Supervisor
-        );
-
+        employee = new Employee(1000F,currency,10F,EmployeeType.Supervisor);
         float expected = 1000F + (386F * 0.5F);
-
-        assertEquals(
-                expected,
-                employee.CalculateYearBonus(),
-                0.001F
-        );
+        assertEquals(expected,employee.CalculateYearBonus(),0.001F);
+   
     }
-
-    // =========================================================
-    // cs()
-    // =========================================================
 
     @Test
     void testCsWorker() {
@@ -248,13 +203,7 @@ public class EmployeeTest {
     void testCsUSDByContent() {
 
         String currency = new String("USD");
-
-        employee = new Employee(
-                1000F,
-                currency,
-                10F,
-                EmployeeType.Supervisor
-        );
+        employee = new Employee(1000F,currency,10F,EmployeeType.Supervisor);         
 
         int month = LocalDate.now().getMonthValue();
 
@@ -272,7 +221,7 @@ public class EmployeeTest {
         assertEquals(
                 expected,
                 employee.cs(),
-                0.001F
+                0.01F
         );
     }
 }

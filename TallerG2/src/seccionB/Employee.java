@@ -61,7 +61,7 @@ public class Employee{
         float salario = 0;
         // Si la moneda es USD, se considera todo el salario,
         // caso contrario se resta 5% por cambio de moneda
-        if(currency == "USD"){salario = salary; }
+        if(currency.equals("USD")){salario = salary; }
         else{salario = (float) (salary * 0.95);}
         switch (employeeType) {
             case Worker:
