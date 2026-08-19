@@ -4,224 +4,275 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.time.LocalDate;
 
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class EmployeeTest {
 
-    private Employee employee;
-
-    @BeforeAll
-    static void setUpClass() {
-        System.out.println("=== INICIO DE LAS PRUEBAS ===");
-    }
-
-    @BeforeEach
-    void setUp() {
-        employee = null;
-        System.out.println("Preparando prueba...");
-    }
-
-    @AfterEach
-    void tearDown() {
-        employee = null;
-        System.out.println("Prueba finalizada.");
-    }
-
-    @AfterAll
-    static void tearDownClass() {
-        System.out.println("=== FIN DE LAS PRUEBAS ===");
-    }
-
-    @Test
-    void testCalculateYearBonusWorker() {    	
-        employee = new Employee( 1000F,"USD",10F,EmployeeType.Worker);                                              
-        assertEquals(386F,employee.CalculateYearBonus(),0.001F);
-                                              
-    }
-
-    @Test
-    void testCalculateYearBonusSupervisor() {
-
-        employee = new Employee(1000F,"USD",10F,EmployeeType.Supervisor);            
-        float expected = 1000F + (386F * 0.5F);
-        assertEquals(expected,employee.CalculateYearBonus(),0.001F);
-                    
-    }
-
-    @Test
-    void testCalculateYearBonusManager() {
-
-        employee = new Employee(1000F,"USD",10F,EmployeeType.Manager);             
-        float expected = 1000F + (386F * 1.0F);
-        assertEquals(expected,employee.CalculateYearBonus(),0.001F);             
-   
-    }
-
-    @Test
-    void testCalculateYearBonusDifferentCurrency() {
-
-        employee = new Employee(1000F,"EUR",10F, EmployeeType.Supervisor);
-        float salario = 1000F * 0.95F;
-        float expected = salario + (386F * 0.5F);
-
-        assertEquals(expected,employee.CalculateYearBonus(),0.001F);
     
-    }
-
     @Test
-    void testCalculateYearBonusUSDByContent() {
-        String currency = new String("USD");
+    void testWorkerSalaryUSD() {
 
-        employee = new Employee(1000F,currency,10F,EmployeeType.Supervisor);
-        float expected = 1000F + (386F * 0.5F);
-        assertEquals(expected,employee.CalculateYearBonus(),0.001F);
-   
-    }
-
-    @Test
-    void testCsWorker() {
-
-        employee = new Employee(
-                1000F,
+        Employee employee = new Employee(
+                386.0F,
                 "USD",
-                10F,
+                0.0F,
                 EmployeeType.Worker
         );
 
-        int month = LocalDate.now().getMonthValue();
+        float resultado = employee.cs();
 
-        float expected;
+        int mes = LocalDate.now().getMonthValue();
 
-        if (month % 2 == 0) {
-            expected = 1000F;
+        float esperado;
+
+        if (mes % 2 == 0) {
+            esperado = 386.0F;
         } else {
-            expected = 1000F + (386F / 12F * 2F);
+            esperado = 386.0F + (386.0F / 12 * 2);
         }
 
-        assertEquals(
-                expected,
-                employee.cs(),
-                0.001F
-        );
+        assertEquals(esperado, resultado, 0.01F);
     }
 
     @Test
-    void testCsSupervisor() {
+    void testWorkerSalaryOtherCurrency() {
 
-        employee = new Employee(
-                1000F,
+        Employee employee = new Employee(
+                386.0F,
+                "EUR",
+                0.0F,
+                EmployeeType.Worker
+        );
+
+        float resultado = employee.cs();
+
+        int mes = LocalDate.now().getMonthValue();
+
+        float salario = 386.0F * 0.95F;
+
+        float esperado;
+
+        if (mes % 2 == 0) {
+            esperado = salario;
+        } else {
+            esperado = salario + (386.0F / 12 * 2);
+        }
+
+        assertEquals(esperado, resultado, 0.01F);
+    }
+
+    @Test
+    void testSupervisorSalaryUSD() {
+
+        Employee employee = new Employee(
+                1000.0F,
                 "USD",
-                10F,
+                100.0F,
                 EmployeeType.Supervisor
         );
 
-        int month = LocalDate.now().getMonthValue();
+        float resultado = employee.cs();
 
-        float salario = 1000F;
-        float valueS = salario + (10F * 0.35F);
+        int mes = LocalDate.now().getMonthValue();
 
-        float expected;
+        float salario = 1000.0F + (100.0F * 0.35F);
 
-        if (month % 2 == 0) {
-            expected = valueS;
+        float esperado;
+
+        if (mes % 2 == 0) {
+            esperado = salario;
         } else {
-            expected = valueS + (386F / 12F * 2F);
+            esperado = salario + (386.0F / 12 * 2);
         }
 
-        assertEquals(
-                expected,
-                employee.cs(),
-                0.001F
+        assertEquals(esperado, resultado, 0.01F);
+    }
+    
+    @Test
+    void testSupervisorSalaryOtherCurrency() {
+
+        Employee employee = new Employee(
+                1000.0F,
+                "EUR",
+                100.0F,
+                EmployeeType.Supervisor
         );
+
+        float resultado = employee.cs();
+
+        int mes = LocalDate.now().getMonthValue();
+
+        float salarioConvertido = 1000.0F * 0.95F;
+        float salarioConBono = salarioConvertido + (100.0F * 0.35F);
+
+        float esperado;
+
+        if (mes % 2 == 0) {
+            esperado = salarioConBono;
+        } else {
+            esperado = salarioConBono + (386.0F / 12 * 2);
+        }
+
+        assertEquals(esperado, resultado, 0.01F);
     }
 
     @Test
-    void testCsManager() {
+    void testManagerSalaryUSD() {
 
-        employee = new Employee(
-                1000F,
+        Employee employee = new Employee(
+                1000.0F,
                 "USD",
-                10F,
+                100.0F,
                 EmployeeType.Manager
         );
 
-        int month = LocalDate.now().getMonthValue();
+        float resultado = employee.cs();
 
-        float salario = 1000F;
-        float valueM = salario + (10F * 0.7F);
+        int mes = LocalDate.now().getMonthValue();
 
-        float expected;
+        float salario = 1000.0F + (100.0F * 0.70F);
 
-        if (month % 2 == 0) {
-            expected = valueM;
+        float esperado;
+
+        if (mes % 2 == 0) {
+            esperado = salario;
         } else {
-            expected = valueM + (386F / 12F * 2F);
+            esperado = salario + (386.0F / 12 * 2);
         }
 
-        assertEquals(
-                expected,
-                employee.cs(),
-                0.001F
-        );
+        assertEquals(esperado, resultado, 0.01F);
     }
 
     @Test
-    void testCsDifferentCurrency() {
+    void testManagerSalaryOtherCurrency() {
 
-        employee = new Employee(
-                1000F,
+        Employee employee = new Employee(
+                1000.0F,
                 "EUR",
-                10F,
+                100.0F,
+                EmployeeType.Manager
+        );
+
+        float resultado = employee.cs();
+
+        int mes = LocalDate.now().getMonthValue();
+
+        float salarioConvertido = 1000.0F * 0.95F;
+        float salarioConBono = salarioConvertido + (100.0F * 0.70F);
+
+        float esperado;
+
+        if (mes % 2 == 0) {
+            esperado = salarioConBono;
+        } else {
+            esperado = salarioConBono + (386.0F / 12 * 2);
+        }
+
+        assertEquals(esperado, resultado, 0.01F);
+    }
+
+    @Test
+    void testWorkerYearBonus() {
+
+        Employee employee = new Employee(
+                1000.0F,
+                "USD",
+                0.0F,
+                EmployeeType.Worker
+        );
+
+        float resultado = employee.CalculateYearBonus();
+
+        assertEquals(386.0F, resultado, 0.01F);
+    }
+
+    @Test
+    void testSupervisorYearBonus() {
+
+        Employee employee = new Employee(
+                1000.0F,
+                "USD",
+                100.0F,
                 EmployeeType.Supervisor
         );
 
-        int month = LocalDate.now().getMonthValue();
+        float resultado = employee.CalculateYearBonus();
 
-        float salario = 1000F * 0.95F;
-        float valueS = salario + (10F * 0.35F);
+        float esperado = 1000.0F + (386.0F * 0.5F);
 
-        float expected;
+        assertEquals(esperado, resultado, 0.01F);
+    }
 
-        if (month % 2 == 0) {
-            expected = valueS;
-        } else {
-            expected = valueS + (386F / 12F * 2F);
-        }
+     @Test
+    void testManagerYearBonus() {
 
-        assertEquals(
-                expected,
-                employee.cs(),
-                0.001F
+        Employee employee = new Employee(
+                1000.0F,
+                "USD",
+                100.0F,
+                EmployeeType.Manager
         );
+
+        float resultado = employee.CalculateYearBonus();
+
+        float esperado = 1000.0F + (386.0F * 1.0F);
+
+        assertEquals(esperado, resultado, 0.01F);
     }
 
     @Test
-    void testCsUSDByContent() {
+    void testSupervisorYearBonusOtherCurrency() {
 
-        String currency = new String("USD");
-        employee = new Employee(1000F,currency,10F,EmployeeType.Supervisor);         
-
-        int month = LocalDate.now().getMonthValue();
-
-        float salario = 1000F;
-        float valueS = salario + (10F * 0.35F);
-
-        float expected;
-
-        if (month % 2 == 0) {
-            expected = valueS;
-        } else {
-            expected = valueS + (386F / 12F * 2F);
-        }
-
-        assertEquals(
-                expected,
-                employee.cs(),
-                0.01F
+        Employee employee = new Employee(
+                1000.0F,
+                "EUR",
+                100.0F,
+                EmployeeType.Supervisor
         );
+
+        float resultado = employee.CalculateYearBonus();
+
+        float salarioConvertido = 1000.0F * 0.95F;
+
+        float esperado = salarioConvertido + (386.0F * 0.5F);
+
+        assertEquals(esperado, resultado, 0.01F);
     }
+
+     @Test
+    void testManagerYearBonusOtherCurrency() {
+
+        Employee employee = new Employee(
+                1000.0F,
+                "EUR",
+                100.0F,
+                EmployeeType.Manager
+        );
+
+        float resultado = employee.CalculateYearBonus();
+
+        float salarioConvertido = 1000.0F * 0.95F;
+
+        float esperado = salarioConvertido + 386.0F;
+
+        assertEquals(esperado, resultado, 0.01F);
+    }
+
+    @Test
+    void testWorkerYearBonusOtherCurrency() {
+
+        Employee employee = new Employee(
+                1000.0F,
+                "EUR",
+                0.0F,
+                EmployeeType.Worker
+        );
+
+        float resultado = employee.CalculateYearBonus();
+
+        assertEquals(386.0F, resultado, 0.01F);
+    }
+
+
 }
+
